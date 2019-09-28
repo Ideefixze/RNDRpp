@@ -6,7 +6,7 @@
 
 int main()
 {
-	std::cout << "Dupa" << std::endl;
+	std::cout << "Hello" << std::endl;
 	int d;
 	std::cin >> d;
     return 0;
