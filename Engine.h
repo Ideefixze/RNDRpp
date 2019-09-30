@@ -11,6 +11,10 @@ class Engine
 	SDL_Surface* mainSurface=NULL;
 	SDL_Renderer* renderer = NULL;
 	Painter* painter = NULL;
+
+	float rotateX=0.0f;
+	float rotateY=0.0f;
+	float rotateZ=0.0f;
 public:
 	Engine();
 	~Engine();

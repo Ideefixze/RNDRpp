@@ -1,12 +1,15 @@
 #include "stdafx.h"
 #include "VecMath.h"
 
-Triangle::Triangle(Vector3 verts[3])
+
+/*
+Triangle::Triangle(float verts[9])
 {
-	this->verts[0] = verts[0];
-	this->verts[1] = verts[1];
-	this->verts[2] = verts[2];
+	this->verts[0] = Vector3(verts[0], verts[1], verts[2]);
+	this->verts[1] = Vector3(verts[3], verts[4], verts[5]);
+	this->verts[2] = Vector3(verts[6], verts[7], verts[8]);
 }
+*/
 
 Triangle::Triangle()
 {
@@ -15,10 +18,6 @@ Triangle::Triangle()
 	this->verts[2] = Vector3();
 }
 
-Mesh::Mesh(std::vector<Triangle> tris)
-{
-	triangles = tris;
-}
 
 Mesh::Mesh()
 {
@@ -43,10 +42,10 @@ void MultiplyMatrix(const Vector3& i, Vector3& o, Matrix4x4 mat)
 
 Vector3 RotatePointX(Vector3 point3, float angle)
 {
-	float theta = angle / 180.0f * 3.1415f;
+	float theta = angle * 0.017453f;
 
 	Matrix4x4 rotationMat;
-	rotationMat.mat[0][0] = 1;
+	rotationMat.mat[0][0] = 1.0f;
 	rotationMat.mat[1][1] = cosf(theta);
 	rotationMat.mat[2][2] = cosf(theta);
 	rotationMat.mat[1][2] = sinf(theta);
@@ -60,9 +59,27 @@ Vector3 RotatePointX(Vector3 point3, float angle)
 
 }
 
+Vector3 RotatePointY(Vector3 point3, float angle)
+{
+	float theta = angle * 0.017453f;
+
+	Matrix4x4 rotationMat;
+	rotationMat.mat[0][0] = cosf(theta);
+	rotationMat.mat[1][1] = 1.0f;
+	rotationMat.mat[2][2] = cosf(theta);
+	rotationMat.mat[2][0] = sinf(theta);
+	rotationMat.mat[0][2] = -sinf(theta);
+	rotationMat.mat[3][3] = 1.0f;
+
+	Vector3 rotated(0, 0, 0);
+	MultiplyMatrix(point3, rotated, rotationMat);
+
+	return Vector3(rotated.x, rotated.y, rotated.z);
+}
+
 Vector3 RotatePointZ(Vector3 point3, float angle)
 {
-	float theta = angle / 180.0f * 3.1415f;
+	float theta = angle * 0.017453f;
 
 	Matrix4x4 rotationMat;
 	rotationMat.mat[0][0] = cosf(theta);

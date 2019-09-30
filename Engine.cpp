@@ -37,6 +37,15 @@ void Engine::HandleInput()
 		case SDLK_ESCAPE:
 			run = false;
 			break;
+		case SDLK_x:
+			rotateX += 1.0f;
+			break;
+		case SDLK_z:
+			rotateZ += 1.0f;
+			break;
+		case SDLK_c:
+			rotateY += 1.0f;
+			break;
 		}
 		break;
 
@@ -82,36 +91,81 @@ bool Engine::Draw()
 	int ticks = SDL_GetTicks();
 
 	//painter->DrawFilledTriangle(iVector2(10 * cosf(t) + 50, 10 * sinf(t)+50), iVector2(30 * cosf(t) + 60, 30 * sinf(t) + 60), iVector2(30, 50), RED, BLUE, WHITE);
-	Vector3 tri[3] = { Vector3(0.0f,0.0f,0.0f), Vector3(1.0f,1.0f,0.0f), Vector3(1.0f,0.0f,0.0f)};
-	Vector3 tri2[3] = { Vector3(0.0f,0.0f,0.0f), Vector3(0.0f,1.0f,0.0f), Vector3(1.0f,1.0f,0.0f)};
-	Vector3 tri3[3] = { Vector3(0.0f,0.0f,1.0f), Vector3(0.0f,1.0f,1.0f), Vector3(0.0f,1.0f,0.0f) };
-	Vector3 tri4[3] = { Vector3(0.0f,0.0f,1.0f), Vector3(1.0f,0.0f,1.0f), Vector3(1.0f,1.0f,1.0f) };
-	Triangle tr (tri);
-	Triangle tr2 (tri2);
-	Triangle tr3(tri3);
-	Triangle tr4(tri4);
-	Mesh m;
-	m.triangles.push_back(tr);
-	m.triangles.push_back(tr2);
-	//m.triangles.push_back(tr3);
-	//m.triangles.push_back(tr4);
+
+	Triangle aa{ { 0.0f,0.0f,0.0f }, { 1.0f,1.0f,0.0f}, { 1.0f,0.0f,0.0f} };
+	Mesh m({ {{ -1.0f, -1.0f, -1.0f }, // triangle 1 : begin
+	{ -1.0f, -1.0f, 1.0f },
+	{ -1.0f, 1.0f, 1.0f }}, // triangle 1 : end
+	{{ 1.0f, 1.0f, -1.0f }, // triangle 2 : begin
+	{ -1.0f, -1.0f, -1.0f },
+	{ -1.0f, 1.0f, -1.0f }}, // triangle 2 : end
+	{{ 1.0f, -1.0f, 1.0f },
+	{ -1.0f, -1.0f, -1.0f },
+	{ 1.0f, -1.0f, -1.0f }},
+	{{ 1.0f, 1.0f, -1.0f },
+	{ 1.0f, -1.0f, -1.0f },
+	{ -1.0f, -1.0f, -1.0f }},
+	{{ -1.0f, -1.0f, -1.0f },
+	{ -1.0f, 1.0f, 1.0f },
+	{ -1.0f, 1.0f, -1.0f }},
+	{{ 1.0f, -1.0f, 1.0f },
+	{ -1.0f, -1.0f, 1.0f },
+	{ -1.0f, -1.0f, -1.0f }},
+	{{ -1.0f, 1.0f, 1.0f },
+	{ -1.0f, -1.0f, 1.0f },
+	{ 1.0f, -1.0f, 1.0f }},
+	{{ 1.0f, 1.0f, 1.0f },
+	{ 1.0f, -1.0f, -1.0f },
+	{ 1.0f, 1.0f, -1.0f }},
+	{{ 1.0f, -1.0f, -1.0f },
+	{ 1.0f, 1.0f, 1.0f },
+	{ 1.0f, -1.0f, 1.0f }},
+	{{ 1.0f, 1.0f, 1.0f },
+	{ 1.0f, 1.0f, -1.0f },
+	{ -1.0f, 1.0f, -1.0f }},
+	{{ 1.0f, 1.0f, 1.0f },
+	{ -1.0f, 1.0f, -1.0f },
+	{ -1.0f, 1.0f, 1.0f }},
+	{{ 1.0f, 1.0f, 1.0f },
+	{ -1.0f, 1.0f, 1.0f },
+	{ 1.0f, -1.0f, 1.0f}} });
 
 	for (auto t : m.triangles)
 	{
+		/*
+		t.verts[0] = RotatePointZ(t.verts[0], rotateZ);
+		t.verts[1] = RotatePointZ(t.verts[1], rotateZ);
+		t.verts[2] = RotatePointZ(t.verts[2], rotateZ);
+
+		t.verts[0] = RotatePointY(t.verts[0], rotateY);
+		t.verts[1] = RotatePointY(t.verts[1], rotateY);
+		t.verts[2] = RotatePointY(t.verts[2], rotateY);
+
+		t.verts[0] = RotatePointX(t.verts[0], rotateX);
+		t.verts[1] = RotatePointX(t.verts[1], rotateX);
+		t.verts[2] = RotatePointX(t.verts[2], rotateX);
+		*/
+
+		t.verts[0] = RotatePointZ(t.verts[0], ti);
+		t.verts[1] = RotatePointZ(t.verts[1], ti);
+		t.verts[2] = RotatePointZ(t.verts[2], ti);
+
+		t.verts[0] = RotatePointY(t.verts[0], ti);
+		t.verts[1] = RotatePointY(t.verts[1], ti);
+		t.verts[2] = RotatePointY(t.verts[2], ti);
+
 		t.verts[0] = RotatePointX(t.verts[0], ti);
 		t.verts[1] = RotatePointX(t.verts[1], ti);
 		t.verts[2] = RotatePointX(t.verts[2], ti);
 
-	    t.verts[0] = RotatePointZ(t.verts[0], ti);
-		t.verts[1] = RotatePointZ(t.verts[1], ti);
-		t.verts[2] = RotatePointZ(t.verts[2], ti);
+	    
 
 		float dis = 4.0f;
 		t.verts[0].z += dis;
 		t.verts[1].z += dis;
 		t.verts[2].z += dis;
 
-		float angle = 90.0f;
+		float angle = 120.0f;
 		float aspect = (float)width / (float)height;
 		Vector2 a = ProjectedPoint(t.verts[0], angle, aspect);
 		Vector2 b = ProjectedPoint(t.verts[1], angle, aspect);
@@ -125,7 +179,9 @@ bool Engine::Draw()
 		b.x *= 0.5f * (float)width; b.y *= 0.5f * (float)height;
 		c.x *= 0.5f * (float)width; c.y *= 0.5f * (float)height;
 		
-		painter->DrawFilledTriangle(iVector2((int)a.x, (int)a.y), iVector2((int)b.x, (int)b.y), iVector2((int)c.x, (int)c.y), RED, GREEN, BLUE);
+		painter->DrawTriangle(iVector2((int)a.x, (int)a.y), iVector2((int)b.x, (int)b.y), iVector2((int)c.x, (int)c.y), WHITE, WHITE, WHITE);
+
+		/*
 		log("a: ");
 		log(a.x);
 		log(a.y);
@@ -135,6 +191,7 @@ bool Engine::Draw()
 		log("c: ");
 		log(c.x);
 		log(c.y);
+		*/
 	}
 
 	
