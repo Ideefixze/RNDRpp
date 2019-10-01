@@ -1,3 +1,3 @@
 #pragma once
 #include <iostream>
-#define log(x) std::cout<<x<<std::endl;
+#define olog(x) std::cout<<x<<std::endl;

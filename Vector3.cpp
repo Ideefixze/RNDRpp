@@ -34,10 +34,26 @@ Vector2 Vector3::Get2D()
 	return Vector2(x, y);
 }
 
+
 Vector3 Vector3::operator+(const Vector3& second) const
 {
 	Vector3 newvec(this->x + second.x, this->y + second.y, this->z + second.z);
 	return newvec;
+}
+
+Vector3 Vector3::operator-(const Vector3& second) const
+{
+	Vector3 newvec(this->x - second.x, this->y - second.y, this->z - second.z);
+	return newvec;
+}
+
+void Vector3::Normalize()
+{
+	float length = sqrtf(x*x + y*y + z*z);
+	x = x / length;
+	y = y / length;
+	z = z / length;
+	
 }
 
 

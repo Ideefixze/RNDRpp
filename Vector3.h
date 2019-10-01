@@ -1,5 +1,6 @@
 #pragma once
 #include "iVector2.h"
+#include <math.h>
 
 class Vector2
 {
@@ -17,6 +18,8 @@ public:
 	Vector3(float x, float y, float z);
 
 	Vector3 operator+(const Vector3& second) const;
+	Vector3 operator-(const Vector3& second) const;
+	void Normalize();
 
 	Vector2 Get2D();
 

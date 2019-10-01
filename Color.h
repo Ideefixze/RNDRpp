@@ -14,6 +14,8 @@ struct Color
 
 	Color();
 	Color(unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
+	bool operator==(const Color& c);
+	Color operator*(const float& m);
 	~Color();
 };
 

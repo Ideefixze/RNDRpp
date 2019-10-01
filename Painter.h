@@ -2,6 +2,8 @@
 #include "Color.h"
 #include "iVector2.h"
 #include <SDL.h>
+#include "utils.h"
+#include <algorithm> 
 class Painter
 {
 	SDL_Renderer* renderer=NULL;

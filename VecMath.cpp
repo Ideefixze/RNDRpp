@@ -18,6 +18,18 @@ Triangle::Triangle()
 	this->verts[2] = Vector3();
 }
 
+Vector3 Triangle::Normal()
+{
+	Vector3 line1 = verts[1] - verts[0];
+	Vector3 line2 = verts[2] - verts[0];
+
+	Vector3 normal = CrossProduct(line1, line2);
+	normal.Normalize();
+	
+	return normal;
+}
+
+
 
 Mesh::Mesh()
 {
@@ -115,4 +127,18 @@ Vector2 ProjectedPoint(Vector3 point3, float viewAngle, float aspectRatio)
 
 	return Vector2(projected.x, projected.y);
 
+}
+
+Vector3 CrossProduct(Vector3 A, Vector3 B)
+{
+	Vector3 output;
+	output.x = A.y*B.z - A.z*B.y;
+	output.y = A.z*B.x - A.x*B.z;
+	output.z = A.x*B.y - A.y*B.x;
+	return output;
+}
+
+float DotProduct(Vector3 A, Vector3 B)
+{
+	return A.x*B.x + A.y*B.y + A.z*B.z;
 }

@@ -7,13 +7,14 @@ Engine::Engine()
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 
-	width = 400;
-	height = 400;
-	window = SDL_CreateWindow("Renderer", 500, 300, width*2, height*2, SDL_WINDOW_OPENGL);
+	width = 150;
+	height = 150;
+	int pixel_scale = 4;
+	window = SDL_CreateWindow("Renderer", 500, 300, width*pixel_scale, height*pixel_scale, SDL_WINDOW_OPENGL);
 	run = true;
 
 	renderer = SDL_CreateRenderer(window, -1, 0);
-	SDL_RenderSetScale(renderer, 2, 2);
+	SDL_RenderSetScale(renderer, pixel_scale, pixel_scale);
 	painter = new Painter(renderer);
 	
 }
@@ -85,7 +86,7 @@ bool Engine::Draw()
 
 	//painter->DrawPixel(iVector2(10, 10), RED);
 	//painter->DrawPixel(iVector2(30, 40), GREEN);
-	float ti = SDL_GetTicks() / 16.0f;
+	float ti = SDL_GetTicks() / 32.0f;
 	//painter->DrawPixel(iVector2(40, 40), BLACK);
 	//painter->DrawLine(iVector2(40, 40), iVector2(25*cosf(t)+40, 25*sinf(t)+40), RED, GREEN);
 	int ticks = SDL_GetTicks();
@@ -146,6 +147,7 @@ bool Engine::Draw()
 		t.verts[2] = RotatePointX(t.verts[2], rotateX);
 		*/
 
+		
 		t.verts[0] = RotatePointZ(t.verts[0], ti);
 		t.verts[1] = RotatePointZ(t.verts[1], ti);
 		t.verts[2] = RotatePointZ(t.verts[2], ti);
@@ -157,30 +159,46 @@ bool Engine::Draw()
 		t.verts[0] = RotatePointX(t.verts[0], ti);
 		t.verts[1] = RotatePointX(t.verts[1], ti);
 		t.verts[2] = RotatePointX(t.verts[2], ti);
+		
 
-	    
+		Vector3 normal = t.Normal();
+		Vector3 camera = { 0,0,0 };
+
+		
 
 		float dis = 4.0f;
 		t.verts[0].z += dis;
 		t.verts[1].z += dis;
 		t.verts[2].z += dis;
 
-		float angle = 120.0f;
-		float aspect = (float)width / (float)height;
-		Vector2 a = ProjectedPoint(t.verts[0], angle, aspect);
-		Vector2 b = ProjectedPoint(t.verts[1], angle, aspect);
-		Vector2 c = ProjectedPoint(t.verts[2], angle, aspect);
-		
-		a.x += 1.0f; a.y += 1.0f;
-		b.x += 1.0f; b.y += 1.0f;
-		c.x += 1.0f; c.y += 1.0f;
+		float dotproduct = DotProduct(camera - t.verts[0] , normal);
 
-		a.x *= 0.5f * (float)width; a.y *= 0.5f * (float)height;
-		b.x *= 0.5f * (float)width; b.y *= 0.5f * (float)height;
-		c.x *= 0.5f * (float)width; c.y *= 0.5f * (float)height;
 		
-		painter->DrawTriangle(iVector2((int)a.x, (int)a.y), iVector2((int)b.x, (int)b.y), iVector2((int)c.x, (int)c.y), WHITE, WHITE, WHITE);
+		if (dotproduct>0.0f && false)
+		{
 
+			float angle = 90.0f;
+			float aspect = (float)width / (float)height;
+			Vector2 a = ProjectedPoint(t.verts[0], angle, aspect);
+			Vector2 b = ProjectedPoint(t.verts[1], angle, aspect);
+			Vector2 c = ProjectedPoint(t.verts[2], angle, aspect);
+
+			a.x += 1.0f; a.y += 1.0f;
+			b.x += 1.0f; b.y += 1.0f;
+			c.x += 1.0f; c.y += 1.0f;
+
+			a.x *= 0.5f * (float)width; a.y *= 0.5f * (float)height;
+			b.x *= 0.5f * (float)width; b.y *= 0.5f * (float)height;
+			c.x *= 0.5f * (float)width; c.y *= 0.5f * (float)height;
+
+			painter->DrawFilledTriangle(iVector2((int)a.x, (int)a.y), iVector2((int)b.x, (int)b.y), iVector2((int)c.x, (int)c.y), WHITE, WHITE, WHITE);
+			painter->DrawTriangle(iVector2((int)a.x, (int)a.y), iVector2((int)b.x, (int)b.y), iVector2((int)c.x, (int)c.y), BLACK, BLACK, BLACK);
+		}
+		
+
+		
+		//painter->DrawFilledTriangle({ 0, 0 }, { 4, 4 }, { 4, 0 }, RED, RED, RED);
+		//painter->DrawLine({ 8, 8 }, { 8, 8 }, BLACK, BLACK);
 		/*
 		log("a: ");
 		log(a.x);
@@ -194,12 +212,24 @@ bool Engine::Draw()
 		*/
 	}
 
+	if (true)
+	{
+		iVector2 aaa = { 2, 0 };
+		iVector2 bbb = { 5, 50 };
+		iVector2 ccc = { 50, 50 };
+
+		painter->DrawFilledTriangle(aaa, bbb, ccc, RED, RED, RED);
+		painter->DrawTriangle(aaa, bbb, ccc, BLACK, BLACK, BLACK);
+		
+	}
+
 	
 	int ticks2 = SDL_GetTicks();
-	log(ticks2 - ticks);
+	olog(ticks2 - ticks);
 	//SDL_Delay(2000);
 	//painter->DrawPixel(iVector2(25 * cosf(t) + 40, 25 * sinf(t) + 40), BLACK);
 	SDL_RenderPresent(renderer);
+	//SDL_Delay(1000);
 
 	return true;
 }

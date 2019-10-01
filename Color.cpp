@@ -18,6 +18,16 @@ Color::Color(unsigned char red, unsigned char green, unsigned char blue, unsigne
 	a = alpha;
 }
 
+bool Color::operator==(const Color& c)
+{
+	if (r == c.r && g == c.g && b == c.b && a == c.a) return true;
+}
+
+Color Color::operator*(const float& m)
+{
+	return Color(r*m, g*m, b*m, a);
+}
+
 Color::~Color()
 {
 }
